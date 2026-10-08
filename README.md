@@ -1,6 +1,18 @@
-# Promiscope Frontend — Community Project Accountability on Stellar
+# Signpost Frontend — Community Project Accountability on Stellar
 
-Promiscope helps communities follow project commitments, milestones, progress updates, supporting evidence, and responses. The frontend uses Stellar SEP-10 wallet authentication to attribute publishing activity to a wallet address; project records are stored off-chain. A wallet address does not prove an organization's identity or that its claims are true. 
+![CI](https://github.com/Signpost-Labs/signpost-app/actions/workflows/ci.yml/badge.svg)
+![Stellar](https://img.shields.io/badge/Stellar-Soroban-7D00FF?logo=stellar&logoColor=white)
+
+Signpost helps communities follow project commitments, milestones, progress updates, supporting evidence, and responses. The frontend uses Stellar SEP-10 wallet authentication to attribute publishing activity to a wallet address; project records are stored off-chain. A wallet address does not prove an organization's identity or that its claims are true. 
+
+## Table of Contents
+
+- [Architecture and tree](#architecture-and-tree)
+- [How the project uses Stellar](#how-the-project-uses-stellar)
+- [Configuration](#configuration)
+- [Prerequisites](#prerequisites)
+- [Development](#development)
+- [Security](#security)
 
 ## Architecture and tree
 
@@ -10,7 +22,7 @@ The project accountability flow uses same-origin route handlers in `app/api/comm
 
 ## How the project uses Stellar
 
-Stellar SEP-10 authenticates a connected wallet for project publishing and updates. The wallet address attributes activity to a pseudonymous account; it does not verify a person's identity or the accuracy of their claims. Project records and evidence links are stored off-chain in SQLite, and the current accountability flow does not transfer XLM or write to Soroban. A future Soroban integration could timestamp a hash of a published revision while keeping project details and evidence off-chain; that design is tracked in the [contracts issue tracker](https://github.com/Stellar-Promiscope/promiscope-contracts/issues/1) and is not implemented yet.
+Stellar SEP-10 authenticates a connected wallet for project publishing and updates. The wallet address attributes activity to a pseudonymous account; it does not verify a person's identity or the accuracy of their claims. Project records and evidence links are stored off-chain in SQLite, and the current accountability flow does not transfer XLM or write to Soroban. A future Soroban integration could timestamp a hash of a published revision while keeping project details and evidence off-chain; that design is tracked in the [contracts issue tracker](https://github.com/Stellar-Signpost/signpost-contracts/issues/1) and is not implemented yet.
 
 ## Configuration
 
@@ -25,9 +37,28 @@ Copy `.env.example` to `.env.local`. Treat that file as the full environment-var
 
 Keep secrets server-side: never expose them through `NEXT_PUBLIC_` variables. Local development can leave optional integrations blank. Project records use SQLite; deployments must mount durable storage and set `PROJECT_RECORDS_DB_PATH` to that volume. Run a single application writer against that SQLite file; ephemeral serverless filesystems and multiple app instances sharing a local file are not supported. All feature-specific variables are documented inline in `.env.example`.
 
+## Prerequisites
+
+| Tool | Notes |
+| --- | --- |
+| **Node.js** | 24+ (see `.nvmrc`) |
+| **npm** | bundled with Node |
+| **Settla-style wallet** | any Stellar wallet for SEP-10 login |
+
 ## Development
 
 Use Node.js 24 or later. Run `npm install`, then `npm run dev`. Check with `npm run typecheck`, `npm run lint`, and `npm test`; browser tests run with `npm run test:e2e`. Update English, French, and Swahili strings together when shared UI copy changes. Keep demo records clearly identified as examples.
 
 See [DEVELOPMENT.md](DEVELOPMENT.md), [CONTRIBUTING.md](CONTRIBUTING.md), and [SECURITY.md](SECURITY.md) for setup and contribution details.
 See [PRODUCT_SCOPE.md](docs/PRODUCT_SCOPE.md) for the active workflow, legacy boundaries, and deployment limits.
+
+## Security
+
+- **Never commit secrets** — keep keys, seed phrases, and `.env` files out of source control.
+- **Testnet values have no real-world value**; treat testnet deployments as experimental.
+- **Keys never leave the wallet** — signing is delegated to the user's Stellar wallet; the app does not store secret keys.
+- Report vulnerabilities per `SECURITY.md` where present rather than opening a public issue.
+
+## License
+
+No `LICENSE` file is published in this repository yet.

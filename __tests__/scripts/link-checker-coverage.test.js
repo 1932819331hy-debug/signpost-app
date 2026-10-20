@@ -13,7 +13,7 @@ describe('documentation link-check workflow (#44)', () => {
     expect(workflow).toContain('workflow_dispatch:');
   });
 
-  test('checks security policy, all nested documentation, and GitHub guidance', () => {
+  test('covers security docs and GitHub guides', () => {
     for (const pattern of [
       'README.md',
       'DEVELOPMENT.md',

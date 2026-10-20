@@ -13,5 +13,12 @@ jobs:
       - name: Run lychee link checker
         uses: lycheeverse/lychee-action@2b973e86fc7b1f6b36a93795fe2c9c6ae1118621 # v1.10.0
         with:
-          args: "--no-progress --exclude 'mailto|github.com/.*#' README.md DEVELOPMENT.md DEPLOYMENT.md CONTRIBUTING.md packages/indexer/README.md"
-          # The workflow will fail if any broken links are found.
+          # Ignore mailto: links (not HTTP) and GitHub fragment anchors, which
+          # cannot be reliably validated by a request for the HTML document.
+          # Keep local relative links in scope so missing files fail the job.
+          args: >-
+            --no-progress
+            --exclude 'mailto|github.com/.*#'
+            README.md DEVELOPMENT.md DEPLOYMENT.md CONTRIBUTING.md SECURITY.md
+            'docs/**/*.md' '.github/**/*.md' packages/indexer/README.md
+          fail: true
